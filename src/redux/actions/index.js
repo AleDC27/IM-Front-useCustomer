@@ -316,7 +316,7 @@ export async function postOrder(order, methodId, mercadoPago, commerceName) {
     };
     if (mercadoPago){
     let orderMp = { commerce: { commerce: commerceName }, order: newOrder };
-    console.log(orderMp);
+    /* console.log(orderMp) */
     let response = await axios.post(
       "http://localhost:3001/mp/create-order",
       orderMp
@@ -325,7 +325,7 @@ export async function postOrder(order, methodId, mercadoPago, commerceName) {
     localStorage.setItem("CSMO_ID", response.data.id);
     localStorage.setItem("CSMO", response.data.order);
     localStorage.removeItem("cart");
-    console.log(response.data);
+    console.log(response)
     return response;
     }else{
     let response = await axios.post(

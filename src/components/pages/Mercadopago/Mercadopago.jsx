@@ -15,6 +15,9 @@ import {
   removerCart,
 } from "../../../redux/actions";
 import { formattedOrder } from "../../../utils/Functions";
+//!
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+
 export default function Mercadopago() {
   const language = useSelector((state) => state.language);
   const paymentMethods = useSelector((state) => state.paymentMethods);
@@ -34,6 +37,52 @@ export default function Mercadopago() {
   const [order, setOrder] = useState({});
   const [isLoading, setIsloading] = useState(true);
   const [t, i18n] = useTranslation(["global"]);
+  //!
+  //const PUBLIC_KEY = import.meta.env.PUBLIC_KEY;
+  const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
+  //console.log(PUBLIC_KEY)
+
+  const [preferenceId, setPreferenceId] = useState(null);
+
+  initMercadoPago(PUBLIC_KEY);
+
+  const createPreference = async () => {
+    const methodId = paymentMethods.filter((m) => m.type === "mercadopago")[0]
+      .id;
+    let mercadoPago = true;
+    try {
+      const response = await postOrder(
+        order,
+        methodId,
+        mercadoPago,
+        commerce.name
+      );
+      const { preferenceId } = response.data;
+      console.log(preferenceId)
+      setPreferenceId(preferenceId)
+      //return preferenceId; 
+
+/*       const { paymentURL } = response.data;
+      console.log(paymentURL);
+      return paymentURL; */
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+/*   const id =async ()=>{
+    await createPreference();
+    console.log(id,"id 105")
+    if (id) {
+      setPreferenceId(id);
+    } 
+  }  */
+  //!
+
+  useEffect(()=>{
+    createPreference()
+  },[postOrder])
 
   useEffect(() => {
     dispatch(getPosValue(tableID));
@@ -59,13 +108,22 @@ export default function Mercadopago() {
     );
   }, [tablePrice, sectorPrice, productsList, user]);
 
-  const handleMp = () => {
-    const methodId = paymentMethods.filter((m) => m.type === "mercadopago")[0].id;
+  const handleMp = async () => {
+    console.log(1231)
+    const methodId = paymentMethods.filter((m) => m.type === "mercadopago")[0]
+      .id;
     let mercadoPago = true;
-    postOrder(order, methodId, mercadoPago, commerce.name);
+    await postOrder(order, methodId, mercadoPago, commerce.name);
     dispatch(removerCart());
-    return;
-  };
+    //!
+  }
+/*       const url = await createPreference();
+    console.log(url,"id 105")
+    if (url) {
+      window.location.href = url;
+    } */
+    //!
+  
 
   return (
     <main className={s.mainContainer}>
@@ -76,7 +134,11 @@ export default function Mercadopago() {
         tablePrice={tablePrice}
         sectorPrice={sectorPrice}
       />
-      <MpButton path={"/rating"} text={language.mercadoPago_payButton} onClick={handleMp} />
+      {/* <MpButton
+        path={"/rating"} text={language.mercadoPago_payButton}
+        onClick={handleMp}
+      /> */}
+      <Wallet /* onClick={handleMp} */  initialization={createPreference}/>
     </main>
   );
 }
