@@ -277,9 +277,11 @@ export const formattedOrder = (
   let table = tableID;
   let commerceId = commerceID;
   //!calculo el precio real
-  let precioMenu = totalPrice - (totalPrice * totalPromotion) / 100;
-  precioMenu = precioMenu - (precioMenu * totalDiscount) / 100;
-  precioMenu = precioMenu + (precioMenu * totalSurcharge) / 100;
+  let precioMenu = totalPrice;
+  // let precioMenu =
+  //   totalPromotion ? totalPrice - (totalPrice * totalPromotion) / 100 : totalPrice;
+  // precioMenu = totalDiscount ? precioMenu - (precioMenu * totalDiscount) / 100 : precioMenu;
+  // precioMenu = totalSurcharge ? precioMenu + (precioMenu * totalSurcharge) / 100 : precioMenu;
   let partial = precioMenu;
   //!calculo precio con costo de mesa
   //!si tienen promocion, descuento, recargo calculo, sino no

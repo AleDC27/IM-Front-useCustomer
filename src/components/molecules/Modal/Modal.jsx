@@ -149,6 +149,7 @@ export default function Modal({ productData,  isOpen, closeModal, changeStyle}) 
               );
             available && changeStyle();
             setAmount(0);
+            setComment("");
             closeModal();
           }}
         >

@@ -285,12 +285,12 @@ export async function postOrder(order, methodId, mercadoPago, commerceName) {
       courierId: null,
       costDelivery: 0,
       sectorId: parseInt(order.sectorId),
-      accountemail: order.user.email ? order.email : "",
-      accountname: order.user.name ? order.name : "",
-      accountphone: order.user.phone ? order.phone : "",
-      accountbirthDate: order.user.birthDate ? order.birthDate : "",
-      accountaddress: order.user.address ? order.address : "",
-      googleEmail: order.user.email ? order.email : "",
+      accountemail: order.user.email ? order.user.email : "",
+      accountname: order.user.name ? order.user.name : "",
+      accountphone: order.user.phone ? order.user.phone : "",
+      accountbirthDate: order.user.birthDate ? order.user.birthDate : "",
+      accountaddress: order.user.address ? order.user.address : "",
+      googleEmail: order.user.email ? order.user.email : "",
       additionals,
       products,
       dishes: {
@@ -316,6 +316,7 @@ export async function postOrder(order, methodId, mercadoPago, commerceName) {
     };
     if (mercadoPago){
     let orderMp = { commerce: { commerce: commerceName }, order: newOrder };
+    console.log(orderMp);
     let response = await axios.post(
       "http://localhost:3001/mp/create-order",
       orderMp
@@ -324,6 +325,7 @@ export async function postOrder(order, methodId, mercadoPago, commerceName) {
     localStorage.setItem("CSMO_ID", response.data.id);
     localStorage.setItem("CSMO", response.data.order);
     localStorage.removeItem("cart");
+    console.log(response.data);
     return response;
     }else{
     let response = await axios.post(

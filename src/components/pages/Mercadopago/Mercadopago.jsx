@@ -57,7 +57,7 @@ export default function Mercadopago() {
       setPrice,
       setOrder
     );
-  }, [tablePrice, sectorPrice, productsList]);
+  }, [tablePrice, sectorPrice, productsList, user]);
 
   const handleMp = () => {
     const methodId = paymentMethods.filter((m) => m.type === "mercadopago")[0].id;
